@@ -1,4 +1,6 @@
 import supertest from 'supertest';
+import sharp from 'sharp';
+import transformImage from '../routes/images/images'
 import app from '../index';
 
 const request = supertest(app);
@@ -19,3 +21,9 @@ describe('Test api endpoints', () => {
         expect(response.status).toBe(200);
     })
 })
+
+// describe('Test image transformation', () => {
+//     it('expect transformImage fn to resolve', async() => {
+//        await transformImage().toBeResolved();
+//     })
+// })
