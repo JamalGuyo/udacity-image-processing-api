@@ -12,28 +12,35 @@ images.get('/', async (req, res) => {
     }
     // new thumb image
     const inputPath = `assets/full/${filename}`
-    const inputFile = await fsPromises.readFile(inputPath)
+    try {
+        const inputFile = await fsPromises.readFile(inputPath)
 
-    // handle image transformation here
-    sharp(inputFile)
-        .resize(100, 200, {
-            fit: sharp.fit.cover,
-            position: sharp.strategy.entropy,
-        })
-        .toBuffer()
-        .then(async (data) => {
-            try {
-                await fsPromises.writeFile(`assets/thumb/${filename}`, data)
-                return res.send(`<div 
+        // handle image transformation here
+        sharp(inputFile)
+            .resize(100, 200, {
+                fit: sharp.fit.cover,
+                position: sharp.strategy.entropy,
+            })
+            .toBuffer()
+            .then(async (data) => {
+                try {
+                    await fsPromises.writeFile(`assets/thumb/${filename}`, data)
+                    return res.send(`<div 
                 style="height:100%; width:100%;background-color:rgba(0,0,0,0.1);
                  display:flex; justify-content:center; align-items: center;">
                  <img style="max-width=100%" src="/thumb/${filename}" width=${width} height=${height}
                  </div>`)
-            } catch (err) {
-                console.log(err)
-            }
-        })
-        .catch((err) => res.send(err))
+                } catch (err) {
+                    res.send(err);
+                }
+            })
+            .catch((err) => res.send(err))
+    }
+    catch (err) {
+        return res.send(`Image not valid. Error ${err}`);
+    }
+
+
 })
 
 export default images
