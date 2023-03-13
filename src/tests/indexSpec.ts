@@ -1,9 +1,11 @@
-describe('Testing test', () => {
-    it('should expect 3 to equal 3', () => {
-        expect(3).toEqual(3)
-    })
+import supertest from 'supertest';
+import app from '../index';
 
-    it('should expect strings to match', () => {
-        expect('jamal').toBe('jamal')
+const request = supertest(app);
+
+describe('Index.ts - Entry point of app', () => {
+    it('expects the root endpoint / to return status of 200', async () => {
+        const response = await request.get('/');
+        expect(response.status).toEqual(200)
     })
 })
